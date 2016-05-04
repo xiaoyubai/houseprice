@@ -143,11 +143,8 @@ def clean_data(df):
 
     for key in words_to_remove:
         for word in words_to_remove[key]:
-            # testing
-            try:
-                df[key] = df[key].str.replace(word, '')
-            except:
-                df[key] = 0
+            df[key] = df[key].str.replace(word, '')
+
 
     for col in col_to_split:
         city_region_df = df[col].str.split(' - ', expand=True)
