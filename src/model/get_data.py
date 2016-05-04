@@ -37,14 +37,14 @@ def scrape_img_link(img_urls):
         all_imgs = []
         for i in xrange(1, 10):
             img_link = img_link + '_P0' + str(i) + '.jpg'
-            r = requests.get(img_link)
+            r = requests.get(img_link, verify=False)
             if r.status_code == 404:
                 break
             else:
                 all_imgs.append(img_link)
         for i in xrange(11, 21):
             img_link = img_link + '_P' + str(i) + '.jpg'
-            r = requests.get(img_link)
+            r = requests.get(img_link, verify=False)
             if r.status_code == 404:
                 break
             else:
@@ -56,7 +56,7 @@ def scrape_img_link(img_urls):
 def scrape(urls, scrape_cols, link_class, img_class, website):
     whole_data = pd.DataFrame()
     for webpage in urls:
-        html_str = requests.get(webpage)
+        html_str = requests.get(webpage, verify=False)
         soup = BeautifulSoup(html_str.content, "html.parser")
 
         col_dict = {}
@@ -108,7 +108,7 @@ def scrape(urls, scrape_cols, link_class, img_class, website):
                     pass
         HOAs = []
         for link in basic_data['link']:
-            html_str = requests.get(link)
+            html_str = requests.get(link, verify=False)
             soup = BeautifulSoup(html_str.content, "html.parser")
             get_HOA_detail = soup(class_='prop-details')
             col_list = [item.get_text() for item in get_HOA_detail]
@@ -186,7 +186,6 @@ if __name__=='__main__':
     raw_zipcodes = list(geo_subset['Postal Code'])
     zipcodes = []
     for zipcode in raw_zipcodes:
-        print zipcode
         try:
             zipcodes.append(int(zipcode))
         except:
