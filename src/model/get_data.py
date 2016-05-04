@@ -182,8 +182,13 @@ if __name__=='__main__':
     geo_df = pd.read_csv('../../data/us_postal_codes.csv')
     geo_subset = geo_df
     # geo_subset = geo_df[geo_df['County']=='San Francisco']
-    zipcodes = list(geo_subset['Postal Code'])
-    zipcodes = [int(zipcode) for zipcode in zipcodes]
+    raw_zipcodes = list(geo_subset['Postal Code'])
+    zipcodes = []
+    for zipcode in zipcodes:
+        try:
+            zipcodes.append(int(zipcode))
+        except:
+            pass
     # zipcodes = [94102, 94103, 94104, 94105]
     # zipcodes = [94103]
     website = 'ziprealty'
