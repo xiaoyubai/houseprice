@@ -205,7 +205,7 @@ if __name__=='__main__':
     print "Save dataframe as CSV"
     final_df.to_csv(input_file)
     print "Write CSV to S3"
-    write_to_s3(input_file, 'sf.csv')
+    write_to_s3(input_file, 'us.csv')
 
     print "Write json file to S3 with img links"
     # Get all imgs for each property
@@ -213,6 +213,6 @@ if __name__=='__main__':
     imgs = scrape_img_link(final_df['img'])
     json_df = final_df[['streetAddress', 'link', 'price']]
     json_df['imgs_to_train'] = imgs
-    json_file = 'sf.json'
+    json_file = 'us.json'
     final_df.to_json(json_file)
     write_to_s3(json_file, json_file)
