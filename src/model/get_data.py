@@ -205,6 +205,7 @@ if __name__=='__main__':
 
     print "Get URLs based on zipcodes"
     urls = get_basic_info(zipcodes, website)
+    print urls
     print "Get house details from URLs and store them into dataframe..."
     main_df = scrape(urls, scrape_cols, link_class, img_class, website)
     print "house info dataframe saved, and start cleaning df"
