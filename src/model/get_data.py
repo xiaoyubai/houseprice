@@ -56,73 +56,76 @@ def scrape_img_link(img_urls):
 def scrape(urls, scrape_cols, link_class, img_class, website):
     whole_data = pd.DataFrame()
     for webpage in urls:
-        html_str = requests.get(webpage, verify=False)
-        soup = BeautifulSoup(html_str.content, "html.parser")
+        try:
+            html_str = requests.get(webpage, verify=False)
+            soup = BeautifulSoup(html_str.content, "html.parser")
 
-        col_dict = {}
-        basic_data = pd.DataFrame()
-        for col in scrape_cols['itemprop']:
-            col_dict[col] = soup(itemprop=col)
-            col_list = [item.get_text() for item in col_dict[col]]
-            col_series = pd.Series(col_list, name=col)
-            basic_data = pd.concat([basic_data, col_series], axis = 1)
+            col_dict = {}
+            basic_data = pd.DataFrame()
+            for col in scrape_cols['itemprop']:
+                col_dict[col] = soup(itemprop=col)
+                col_list = [item.get_text() for item in col_dict[col]]
+                col_series = pd.Series(col_list, name=col)
+                basic_data = pd.concat([basic_data, col_series], axis = 1)
 
-        detail_names = ['NA1', 'bed', 'bath', 'sqft', 'price_per_sqrt', 'CND', 'NA2', 'lot_size', 'built', 'on_site', 'NA3']
+            detail_names = ['NA1', 'bed', 'bath', 'sqft', 'price_per_sqrt', 'CND', 'NA2', 'lot_size', 'built', 'on_site', 'NA3']
 
-        for col in scrape_cols['class']:
-            col_dict[col] = soup(class_=col)
-            col_list = [item.get_text() for item in col_dict[col]]
-            detail = [attr.split('\n') for attr in col_list]
-            for item in detail:
-                if all("bed" not in s for s in item):
-                    item.insert(1, 'N/Abed')
-                if all("bath" not in s for s in item):
-                    item.insert(2, 'N/Abath')
-            col_series = pd.DataFrame(detail, columns=detail_names)
-            basic_data = pd.concat([basic_data, col_series], axis = 1)
+            for col in scrape_cols['class']:
+                col_dict[col] = soup(class_=col)
+                col_list = [item.get_text() for item in col_dict[col]]
+                detail = [attr.split('\n') for attr in col_list]
+                for item in detail:
+                    if all("bed" not in s for s in item):
+                        item.insert(1, 'N/Abed')
+                    if all("bath" not in s for s in item):
+                        item.insert(2, 'N/Abath')
+                col_series = pd.DataFrame(detail, columns=detail_names)
+                basic_data = pd.concat([basic_data, col_series], axis = 1)
 
-        col_dict['price'] = soup(class_=scrape_cols['price'])
-        price_col = [item.get_text() for item in col_dict['price']]
-        price_series = pd.DataFrame(price_col, columns=['price'])
-        basic_data = pd.concat([basic_data, price_series], axis=1)
+            col_dict['price'] = soup(class_=scrape_cols['price'])
+            price_col = [item.get_text() for item in col_dict['price']]
+            price_series = pd.DataFrame(price_col, columns=['price'])
+            basic_data = pd.concat([basic_data, price_series], axis=1)
 
-        links = soup(class_=link_class, href=True)
-        link_list = ['https://www.%s.com%s' %(website, link['href']) for link in links]
-        link_col = pd.Series(link_list, name='link')
-        basic_data = pd.concat([basic_data, link_col], axis=1)
+            links = soup(class_=link_class, href=True)
+            link_list = ['https://www.%s.com%s' %(website, link['href']) for link in links]
+            link_col = pd.Series(link_list, name='link')
+            basic_data = pd.concat([basic_data, link_col], axis=1)
 
-        imgs = []
+            imgs = []
 
-        for each_div in soup.findAll('div',{'class': img_class[0]}):
-            try:
-                next_class = each_div.find('div', attrs={'class': img_class[1]})
-                next_a = next_class.find('a', attrs={'itemprop': 'image'})
-                next_itemprop = next_a.find('meta', attrs={'itemprop': 'contentUrl'})
-                imgs.append(next_itemprop['content'])
-            except:
+            for each_div in soup.findAll('div',{'class': img_class[0]}):
                 try:
                     next_class = each_div.find('div', attrs={'class': img_class[1]})
-                    next_img = next_class.find('img', attrs={'alt': 'Home Photo'})
-                    imgs.append(next_img['src'])
+                    next_a = next_class.find('a', attrs={'itemprop': 'image'})
+                    next_itemprop = next_a.find('meta', attrs={'itemprop': 'contentUrl'})
+                    imgs.append(next_itemprop['content'])
                 except:
-                    pass
-        HOAs = []
-        for link in basic_data['link']:
-            html_str = requests.get(link, verify=False)
-            soup = BeautifulSoup(html_str.content, "html.parser")
-            get_HOA_detail = soup(class_='prop-details')
-            col_list = [item.get_text() for item in get_HOA_detail]
-            detail = [attr.split('\n') for attr in col_list]
-            HOA = detail[0][-2]
-            if '(Monthly)' in HOA:
-                HOAs.append(HOA.replace(' (Monthly)', ''))
-            else:
-                HOAs.append('0')
-        # print len(basic_data), len(imgs)
-        basic_data['HOA'] = HOAs
-        basic_data['img'] = imgs
+                    try:
+                        next_class = each_div.find('div', attrs={'class': img_class[1]})
+                        next_img = next_class.find('img', attrs={'alt': 'Home Photo'})
+                        imgs.append(next_img['src'])
+                    except:
+                        pass
+            HOAs = []
+            for link in basic_data['link']:
+                html_str = requests.get(link, verify=False)
+                soup = BeautifulSoup(html_str.content, "html.parser")
+                get_HOA_detail = soup(class_='prop-details')
+                col_list = [item.get_text() for item in get_HOA_detail]
+                detail = [attr.split('\n') for attr in col_list]
+                HOA = detail[0][-2]
+                if '(Monthly)' in HOA:
+                    HOAs.append(HOA.replace(' (Monthly)', ''))
+                else:
+                    HOAs.append('0')
+            # print len(basic_data), len(imgs)
+            basic_data['HOA'] = HOAs
+            basic_data['img'] = imgs
 
-        whole_data = pd.concat([whole_data, basic_data], axis=0)
+            whole_data = pd.concat([whole_data, basic_data], axis=0)
+        except:
+            pass
 
     return whole_data
         #details = soup.find("div", {"id": "searchCount"}).text
