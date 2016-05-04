@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html><head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=768px, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Youtube Music Player</title>
+		
+		<!---<script src="js/jquery.js" type="text/javascript"></script>
+		<script src="js/cordova-2.0.0.js" type="text/javascript"></script>
+		<!---<script src="js/zepto.js" type="text/javascript"></script>-->
+			<script async="" src="Youtube%20Music%20Player_files/www-widgetapi-vflU5wlSl.js"></script><script src="Youtube%20Music%20Player_files/iframe_api"></script><script src="Youtube%20Music%20Player_files/jsapi"></script>  
+	<script type="text/javascript">
+		google.load("jquery", "1.7.1", {uncompressed:true});
+		google.load("jqueryui", "1.7.2");
+		google.load("swfobject", "2.2");
+	</script><script src="Youtube%20Music%20Player_files/jquery_002.js" type="text/javascript"></script><script src="Youtube%20Music%20Player_files/jquery-ui.js" type="text/javascript"></script><script src="Youtube%20Music%20Player_files/swfobject.js" type="text/javascript"></script>
+		<script src="Youtube%20Music%20Player_files/webplayer.htm" type="text/javascript"></script>
+		<script src="Youtube%20Music%20Player_files/jquery.js" type="text/javascript"></script>
+		<script src="Youtube%20Music%20Player_files/main.js" type="text/javascript"></script>
+
+		<link rel="stylesheet/less" type="text/css" href="http://localhost/scripts/yt/css/style.less">
+		<script src="Youtube%20Music%20Player_files/less.js" type="text/javascript"></script><style id="less:scripts-yt-css-style" media="screen" type="text/css">/* main css------------ */
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: #21497a;
+  font: 14px/1.231 Arial, Helvetica, sans-serif;
+}
+body {
+  background: #000719;
+  /* Old browsers */
+
+  background: -moz-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #000719), color-stop(44%, #0c2c5b), color-stop(100%, #21497a));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* IE10+ */
+
+  height: 100%;
+  width: 100%;
+}
+ul,
+ol {
+  list-style: noen;
+}
+a {
+  text-decoration: none;
+  color: #fff;
+}
+a img {
+  border: 0;
+}
+.lft {
+  float: left;
+}
+.rht {
+  float: right;
+}
+.clr {
+  clear: both;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+#logo {
+  display: inline-block;
+  padding: 28px 0 0;
+}
+#wrapper {
+  margin: 0 auto;
+  text-align: center;
+  height: 100%;
+  background: #000719;
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  background: -moz-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #000719), color-stop(44%, #0c2c5b), color-stop(100%, #21497a));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(45deg, #000719 0%, #0c2c5b 44%, #21497a 100%);
+  /* IE10+ */
+
+  height: 100%;
+  width: 100%;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  height: 256px;
+  display: block;
+  width: 100%;
+}
+#player_controls {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  background: #000;
+  height: 256px;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+#player_controls #play {
+  background-image: url(http://localhost/scripts/yt/css/images/controls_play_32.png);
+  width: 64px;
+  height: 64px;
+  display: block;
+  position: absolute;
+  top: 96px;
+  left: 50%;
+  margin-left: -32px;
+}
+#player_controls #next {
+  background-image: url(http://localhost/scripts/yt/css/images/controls_chapter_next_32.png);
+  width: 64px;
+  height: 64px;
+  display: block;
+  position: absolute;
+  top: 96px;
+  right: 32px;
+}
+#player_controls #previous {
+  background-image: url(http://localhost/scripts/yt/css/images/controls_chapter_previous_32.png);
+  width: 64px;
+  height: 64px;
+  display: block;
+  position: absolute;
+  top: 96px;
+  left: 32px;
+}
+#player_controls #options {
+  width: 100%;
+  height: 64px;
+  line-height: 64px;
+  display: block;
+  font-size: 32px;
+  position: absolute;
+  top: 0px;
+  text-transform: uppercase;
+}
+#player_controls #menu {
+  width: 100%;
+  height: 64px;
+  line-height: 64px;
+  display: block;
+  font-size: 32px;
+  position: absolute;
+  top: 192px;
+  text-transform: uppercase;
+}
+#now_playing {
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  position: absolute;
+  top: 32px;
+  font-weight: bold;
+}
+#song_list {
+  position: absolute;
+  top: 96px;
+  width: 100%;
+  text-align: center;
+}
+.song_name {
+  color: #4B6996;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+.song_name.active {
+  text-shadow: -1px 1px 5px #ffffcc, 1px -1px 5px #ffffff;
+  color: #fff;
+}
+.song_name.selected {
+  color: #A5B4CB;
+}
+#functinbtnWrap {
+  margin: 100px 0;
+}
+#functinbtnWrap a {
+  background-image: url(http://localhost/scripts/yt/css/images/buttons-sprite.png);
+  margin: 6px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  width: 313px;
+  height: 82px;
+}
+#scan {
+  background-position: 0 -97px;
+}
+#scan.active,
+#scan:hover {
+  background-position: 0 0;
+}
+#enterCode {
+  background-position: -326px -97px;
+}
+#enterCode:hover {
+  background-position: -326px 0;
+}
+#backOffice {
+  background-position: -658px -97px;
+}
+#backOffice:hover {
+  background-position: -658px 0;
+}
+/* read barcode---------- */
+#barCodFrmWrap {
+  width: 696px;
+  margin: 129px auto 0;
+}
+#barCodFrmWrap h2 {
+  color: #FFDF0E;
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 49px;
+  padding: 0 4px;
+  text-align: left;
+}
+#barCodFrmWrap .txtBoxHolder {
+  background: url("http://localhost/scripts/yt/css/images/textbox.png") no-repeat scroll 0 0 transparent;
+  border: 0 none;
+  font-size: 28px;
+  height: 76px;
+  margin-bottom: 54px;
+  text-align: center;
+  width: 692px;
+}
+#barCodFrmWrap button {
+  background-image: url(http://localhost/scripts/yt/css/images/buttons-sprite1.png);
+  height: 83px ;
+  width: 315px;
+  display: inline-block;
+  border: 0;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-color: transparent;
+}
+#okBtn {
+  background-position: 0 -96px;
+  float: right;
+}
+#okBtn.active,
+#okBtn:hover {
+  background-position: 0 0;
+  float: right;
+}
+#cancelBtn {
+  background-position: -327px -96px;
+  float: left;
+}
+#cancelBtn:hover {
+  background-position: -327px 0;
+  float: left;
+}
+</style>
+		
+	</head>
+	<body>
+		
+		<div id="wrapper">
+			<span id="now_playing">Currently Playing : Wonderful - Angel</span>
+			<span id="player_state">Now playing</span>
+		<!---<div id="ytapiplayer">Loading...</div>-->
+		<iframe id="ytplayer" type="text/html" src="Youtube%20Music%20Player_files/RgbKKZWZuQo.htm" allowfullscreen="" frameborder="0" height="360" width="640">
+			&lt;iframe id="ytapiplayer" width="420" height="315" 
+src="http://www.youtube.com/embed/SU0XN_CL8T4?version=3&amp;html5=1" 
+frameborder="0"&gt;</iframe>
+			<ul id="song_list" style="display: none;">
+				<li><span class="song_name">Pareshaan - Ishaqzaade</span></li>
+				<li><span class="song_name">Pareshaan - Ishaqzaade</span></li>
+				<li><span class="song_name active">Tum Hi Ho Bandhu - Cocktail</span></li>
+				<li><span class="song_name">Jannatein Kahan (Power Ballad) - Jannat 2</span></li>
+				<li><span class="song_name selected">Jannatein Kahan (Power Ballad) - Jannat 2</span></li>
+			</ul></div>
+					<div id="playlist_holder" class="ui-widget ui-helper-clearfix">
+			<ul id="playlist"><li class="ui-state-default" id="track_0"><span class="ui-icon ui-icon-circle-triangle-e"></span>Wonderful - Angel</li><li class="ui-state-default" id="track_1"><span class="ui-icon ui-icon-circle-triangle-e"></span>One Thing by One Direction</li><li class="ui-state-default" id="track_2"><span class="ui-icon ui-icon-circle-triangle-e"></span>Black Heart - Stooshe</li><li class="ui-state-default" id="track_3"><span class="ui-icon ui-icon-circle-triangle-e"></span>Earth Song - Michael Jackson</li><li class="ui-state-default" id="track_4"><span class="ui-icon ui-icon-circle-triangle-e"></span>Stairway To Heaven - Led Zeppelin</li><li class="ui-state-default" id="track_5"><span class="ui-icon ui-icon-circle-triangle-e"></span>Rule The World - Take That</li><li class="ui-state-default" id="track_6"><span class="ui-icon ui-icon-circle-triangle-e"></span>What About Now - Daughtry</li><li class="ui-state-default" id="track_7"><span class="ui-icon ui-icon-circle-triangle-e"></span>La Bamba - Richie Valens </li></ul>
+			<div id="slider-vertical" class="ui-widget-header"></div>
+		</div>
+			<script type="text/html" id="song_list_tpl">
+			<![CDATA[
+				<ul id="song_list" style="display: none;">
+				    <% for(d=0;d<this.Vehicles.length;d++) { %>
+					<li><span class="song_name">Pareshaan - Ishaqzaade</span></li>
+					<% } %>
+				</div>
+			]]>
+		</script>
+			<!--Song name
+			time seek bar
+			volume icon
+			
+			menu > add to playlist, remove from playlist
+			view playlists
+			new playlist-->
+			<div id="myappz_radio" class="ui-corner-all">
+
+	<div id="myappz_radio_container" class="ui-widget-content ui-corner-all">
+
+		<div id="panel" class="ui-tabs-panel ui-widget-content ui-corner-all">
+			<div id="currently_playing"></div>
+			<div id="elapsed_time">Time elapsed : --:--/--:--</div>
+			<div id="player_state"></div>
+			<div id="time_slider" title="Time"></div>
+			<a id="youtube_logo" href="http://www.youtube.com/"><img src="Youtube%20Music%20Player_files/yt_powered_by_black.htm"></a>
+		</div>
+
+		<!--<ul class="ui-widget ui-helper-clearfix" id="icons">
+			<li title="Play" class="ui-state-default ui-corner-all" id="play"><span class="ui-icon ui-icon-play"></span></li>
+			<li title="Pause" class="ui-state-default ui-corner-all" id="pause"><span class="ui-icon ui-icon-pause"></span></li>
+			<li title="Rewind" class="ui-state-default ui-corner-all" id="seek-prev"><span class="ui-icon ui-icon-seek-prev"></span></li>
+			<li title="Stop" class="ui-state-default ui-corner-all" id="stop"><span class="ui-icon ui-icon-stop"></span></li>
+			<li title="Forward" class="ui-state-default ui-corner-all" id="seek-next"><span class="ui-icon ui-icon-seek-next"></span></li>
+			<li title="Previous track" class="ui-state-default ui-corner-all" id="seek-first"><span class="ui-icon ui-icon-seek-first"></span></li>
+			<li title="Next Track" class="ui-state-default ui-corner-all" id="seek-end"><span class="ui-icon ui-icon-seek-end"></span></li>
+			<li class="ui-state-default ui-corner-all" style="visibility:  hidden;"><span class="ui-icon ui-icon-volume-off"></span></li>
+			<li title="Mute/Unmute" class="ui-state-default ui-corner-all" id="volume"><span class="ui-icon ui-icon-volume-on"></span></li>
+		</ul>-->
+		
+		<div id="slider" title="Volume"></div>
+	
+		<div class="ui-helper-clearfix"></div>		
+		<span class="clear"></span> 
+		<div id="playlist_holder" class="ui-widget ui-helper-clearfix">
+			<ul id="playlist"></ul>
+			<div id="slider-vertical" class="ui-widget-header"></div>
+		</div>
+		<span class="clear space"></span> 
+	<div>
+<div>
+
+		</div>
+
+		<footer>
+		<div id="player_controls">
+			<a id="options" href="#">Options</a>
+			<a id="play" href="#"></a>
+			<a id="next" href="#"> </a>
+			<a id="previous" href="#"> </a>
+			<a id="menu" href="#">Menu</a>
+		</div>
+		</footer>
+			
+
+	
+</div></div></div></body></html>

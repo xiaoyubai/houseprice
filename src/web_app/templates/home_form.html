@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Real estate - Bootstrap</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+	<link id="switch_style" href="css/real_estate.css" rel="stylesheet">
+	<link href="css/theme.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+		<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	
+</head>
+
+<body>
+	
+    <div class="container">
+		<div class="row"><!-- start header -->
+			<div class="col-sm-4 col-xs-6 logo">
+				<a href="index.html">
+				<div class="row">
+					<div class="col-sm-3 hidden-xs logo-img">
+						<img src="css/images/Home-green-48.png" alt=""/>
+					</div>
+					<div class="col-sm-9 logo-text">
+						<h1><small>Bootstrap</small><br /><span>Real</span> estate</h1>
+					</div>
+				</div>
+				</a>
+			</div>		
+			<div class="col-sm-4 col-xs-6 customer_service pull-right text-right">
+				<h4 class="phone"><span class="hidden-xs">Customer service: </span>0800 8475 548</h4>
+				<h4><small>24 hours a day, 7 days a week</small></h4>
+			</div>
+		</div><!-- end header -->
+		
+		<div class="row"><!-- start nav -->
+			<div class="col-sm-12">
+
+				<nav class="navbar navbar-inverse" role="navigation" >
+					<div class="navbar-inner">
+				  <!-- Brand and toggle get grouped for better mobile display -->
+				  <div class="navbar-header">
+				    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+				      <span class="sr-only">Toggle navigation</span>
+				      <span class="icon-bar"></span>
+				      <span class="icon-bar"></span>
+				      <span class="icon-bar"></span>
+				    </button>
+				    <a class="navbar-brand visible-xs" href="#">Menu</a>
+				  </div>
+
+				  <!-- Collect the nav links, forms, and other content for toggling -->
+				  <div class="collapse navbar-collapse navbar-ex1-collapse">
+				    <ul class="nav navbar-nav">
+						<li><a href="listings.html" class="first">For sale</a></li>
+						<li><a href="map_properties.html">To rent</a></li>
+						<li><a href="compare.html">New homes</a></li>
+						<li><a href="property.html">Property of the day</a></li>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Property pages <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="listings.html">Property listings</a></li>
+								<li><a href="map_properties.html">Properties map</a></li>
+								<li><a href="property.html">Single property</a></li>
+								<li><a href="compare.html">Compare properties</a></li>
+							</ul>
+						</li>
+                        
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Other pages <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+                                <li><a href="typography.html">Typography</a></li>
+                                <li><a href="terms.html">Terms and conditions</a></li>
+                                <li><a href="contact.html">Contact us</a></li>
+                                <li><a href="about.html">About us</a></li>
+							</ul>
+						</li>
+				    </ul>
+
+				    					<ul class="nav navbar-nav navbar-right">
+									
+									<li class="dropdown">
+										<a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign Up<strong class="caret"></strong></a>
+										<div class="dropdown-menu">
+											<form action="index.html" method="post">
+												<input type="text" name="user[username]" placeholder="Full name" size="30" />
+												<input type="password" name="user[password]" placeholder="Email" size="30" />
+												<input type="password" name="user[password]" placeholder="Password" size="30" />
+												
+												<input class="btn btn-primary" type="submit" name="commit" value="Sign Up" />
+											</form>
+										</div>
+									</li>			
+									
+									<li class="dropdown">
+										<a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+										<div class="dropdown-menu">
+											<form action="index.html" method="post">
+												<input type="text" name="user[username]" placeholder="Username or email" size="30" /><br class="visible-xs"/>
+												<input type="password" name="user[password]" placeholder="Password" size="30" /><br class="visible-xs"/>
+												<input id="remember_me" type="checkbox" name="user[remember_me]" value="1" />
+												<label class="string optional"> Remember me</label>
+												
+												<input class="btn btn-primary" type="submit" name="commit" value="Sign In" />
+											</form>
+										</div>
+									</li>
+									
+								</ul>
+
+				  </div><!-- /.navbar-collapse -->
+				</div>
+				</nav>
+
+			</div>
+		</div><!-- end nav -->				<div class="col-sm-12 well lform">
+
+				<div class="row">
+							<form class="form-vertical" action="listings.html">
+			<fieldset>
+					<div class="col-sm-12">
+					 
+					 	<div class="form-group">
+					    	<label>Location</label>
+					    	<input type="text" class="form-control" placeholder="Where do you want to live?">
+					  	</div>
+						
+						<div class="row">
+							<div class="col-sm-6">
+
+								<div class="form-group">
+							    	<label>Search radius:</label>
+										<select class="form-control">
+											<option>This area only</option>
+											<option>Within 1/4 mile</option>
+											<option>Within 1/2 mile</option>
+											<option>Within 1 mile</option>
+											<option>Within 3 miles</option>
+											<option>Within 5 miles</option>
+											<option>Within 10 miles</option>
+											<option>Within 15 miles</option>
+											<option>Within 20 miles</option>
+											<option>Within 30 miles</option>
+											<option>Within 40 miles</option>
+										</select>
+								</div>
+
+							</div>
+							<div class="col-sm-6">	
+
+								<div class="form-group">
+							    	<label>Property type:</label>
+										<select class="form-control">
+											<option>Any</option>
+											<option>Houses</option>
+											<option>Flats/ Apartments</option>
+											<option>Bungalows</option>
+											<option>Land</option>
+											<option>Commercial property</option>
+											<option>Other</option>
+										</select>
+								</div>
+
+							</div>		
+						</div>	
+						<div class="row">						  
+							<div class="col-sm-6">	
+
+								<div class="form-group">
+							    	<label >Bedrooms:</label>
+										<select class="form-control">
+											<option>Any</option>
+											<option>1</option>
+											<option>2</option>
+											<option>3</option>
+											<option>4</option>
+											<option>5+</option>
+										</select>
+								</div>
+
+							</div>
+							<div class="col-sm-6">	
+
+								<div class="form-group">
+							    	<label>Rent or Buy</label>
+										<select class="form-control">
+											<option>Any</option>
+											<option>Rent</option>
+											<option>Buy</option>
+										</select>
+								</div>
+
+							</div>		
+							
+						</div>							
+						<div class="row hidden-sm">						  
+							<div class="col-sm-6">	
+
+								<div class="form-group">
+							    	<label>Minimum Price</label>
+										<select class="form-control">
+											<option selected="selected" value="">No min</option><option value="50000">50,000</option><option value="60000">60,000</option><option value="70000">70,000</option><option value="80000">80,000</option><option value="90000">90,000</option><option value="100000">100,000</option><option value="110000">110,000</option><option value="120000">120,000</option><option value="125000">125,000</option><option value="130000">130,000</option><option value="140000">140,000</option><option value="150000">150,000</option><option value="160000">160,000</option><option value="170000">170,000</option><option value="175000">175,000</option><option value="180000">180,000</option><option value="190000">190,000</option><option value="200000">200,000</option><option value="210000">210,000</option><option value="220000">220,000</option><option value="230000">230,000</option><option value="240000">240,000</option><option value="250000">250,000</option><option value="260000">260,000</option><option value="270000">270,000</option><option value="280000">280,000</option><option value="290000">290,000</option><option value="300000">300,000</option><option value="325000">325,000</option><option value="350000">350,000</option><option value="375000">375,000</option><option value="400000">400,000</option><option value="425000">425,000</option><option value="450000">450,000</option><option value="475000">475,000</option><option value="500000">500,000</option><option value="550000">550,000</option><option value="600000">600,000</option><option value="650000">650,000</option><option value="700000">700,000</option><option value="800000">800,000</option><option value="900000">900,000</option><option value="1000000">1,000,000</option><option value="1500000">1,500,000</option><option value="2000000">2,000,000</option><option value="3000000">3,000,000</option><option value="">No min</option>
+										</select>
+								</div>
+
+							</div>
+							<div class="col-sm-6">	
+
+								<div class="form-group">
+							    	<label>Maximum Price</label>
+										<select class="form-control">
+											<option selected="selected" value="">No min</option><option value="50000">50,000</option><option value="60000">60,000</option><option value="70000">70,000</option><option value="80000">80,000</option><option value="90000">90,000</option><option value="100000">100,000</option><option value="110000">110,000</option><option value="120000">120,000</option><option value="125000">125,000</option><option value="130000">130,000</option><option value="140000">140,000</option><option value="150000">150,000</option><option value="160000">160,000</option><option value="170000">170,000</option><option value="175000">175,000</option><option value="180000">180,000</option><option value="190000">190,000</option><option value="200000">200,000</option><option value="210000">210,000</option><option value="220000">220,000</option><option value="230000">230,000</option><option value="240000">240,000</option><option value="250000">250,000</option><option value="260000">260,000</option><option value="270000">270,000</option><option value="280000">280,000</option><option value="290000">290,000</option><option value="300000">300,000</option><option value="325000">325,000</option><option value="350000">350,000</option><option value="375000">375,000</option><option value="400000">400,000</option><option value="425000">425,000</option><option value="450000">450,000</option><option value="475000">475,000</option><option value="500000">500,000</option><option value="550000">550,000</option><option value="600000">600,000</option><option value="650000">650,000</option><option value="700000">700,000</option><option value="800000">800,000</option><option value="900000">900,000</option><option value="1000000">1,000,000</option><option value="1500000">1,500,000</option><option value="2000000">2,000,000</option><option value="3000000">3,000,000</option><option value="">No min</option>
+										</select>
+								</div>
+
+							</div>		
+							
+						</div>	
+						
+					</div>
+					<div class="row">	
+						
+						<div class="col-sm-6 pull-right" style="margin-top: 10px;">
+							<button class="btn btn-primary pull-right" type="submit">Search</button>
+							
+						</div>
+					</div>						
+									
+			</fieldset>
+		</form>
+				</div>
+
+	</div><footer>
+	<hr />	
+	<p class="pull-right"><a href="#">Back to top</a></p>
+	<p>
+		<a href="index.html">Home</a> |
+		<a href="about.html">About</a> |
+		<a href="typography.html">Typography</a> |
+		<a href="terms.html">Terms and Conditions</a> |
+		<a href="contact.html">Contact Us</a><br />
+		All content &copy; 2014 | <a href="about.html">Built with Twitter Bootstrap</a> | <a href="https://wrapbootstrap.com/">WrapBootstrap</a>.
+	</p>
+</footer>
+
+</div> <!-- /container -->
+
+<div id="theme_switcher">
+	<div class="btn-group">
+		<a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#">Switch theme <span class="caret"></span></a>
+		<ul class="dropdown-menu">
+            <li><a href="#" data-theme="real_estate">Real Estate</a></li>
+			<li><a href="#" data-theme="cerulean">Cerulean</a></li>
+			<li><a href="#" data-theme="lumen">Lumen</a></li>
+            <li><a href="#" data-theme="slate">Slate</a></li>
+			<li><a href="#" data-theme="united">United</a></li>
+			<li><a href="#" data-theme="cyborg">Cyborg</a></li>
+            <li><a href="#" data-theme="spacelab">Spacelab</a></li>
+			<li><a href="#" data-theme="journal">Journal</a></li>
+			<li><a href="#" data-theme="simplex">Simplex</a></li>
+            <li><a href="#" data-theme="superhero">Superhero</a></li>
+            <li><a href="#" data-theme="amelia">Amelia</a></li>            
+			<li><a href="#" data-theme="cosmo">Cosmo</a></li>
+			<li><a href="#" data-theme="flatly">Flatly</a></li>
+		</ul>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/response.min.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+    <!-- Important Owl stylesheet -->
+    <link rel="stylesheet" href="js/owl-carousel/owl.carousel.css">
+     
+    <!-- Default Theme -->
+    <link rel="stylesheet" href="js/owl-carousel/owl.theme.css">
+     
+    <!-- Include js plugin -->
+    <script src="js/owl-carousel/owl.carousel.js"></script>
+
+<script type="text/javascript" src="js/jquery.aw-showcase/jquery.aw-showcase.js"></script>
+<link rel="stylesheet" href="js/jquery.aw-showcase/css/style.css" />
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+
+<link rel="stylesheet" href="js/badger/badger.min.css" />
+<script type="text/javascript" src="js/badger/badger.min.js"></script>
+
+<link rel="stylesheet" href="js/sticky/sticky.min.css" />
+<script type="text/javascript" src="js/sticky/sticky.min.js"></script>
+
+<script type="text/javascript" src="js/portamento-min.js"></script>
+<script type="text/javascript" src="js/global.js"></script>
+
+</body>
+</html>

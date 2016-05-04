@@ -1,0 +1,263 @@
+/*
+* Youtube MusicBox 1.0
+* By appman, AppsArea.com
+* ---
+* Plays videos from youtube as a music player on your site.
+* USAGE : .
+*/
+
+var YoutubeMusicPlayer = {
+	
+	start: function(){
+		YoutubeMusicPlayer.current_item = 0;
+		YoutubeMusicPlayer.ytplayer;
+		YoutubeMusicPlayer.playlist = [{"youtube_id":"ysupz4NBSh0","title":"Wonderful - Angel"},{"youtube_id":"tjgLbv3uPbI","title":"One Thing by One Direction"},{"youtube_id":"RgbKKZWZuQo","title":"Black Heart - Stooshe"},{"youtube_id":"-vb2do4EGSs","title":"Earth Song - Michael Jackson"},{"youtube_id":"Sflf6gGJn50","title":"Stairway To Heaven - Led Zeppelin"},{"youtube_id":"tF7SuTZbt7s","title":"Rule The World - Take That"},{"youtube_id":"K2HSQNc2r_Q","title":"What About Now - Daughtry"},{"youtube_id":"Coy8Hoa1DNw","title":"La Bamba - Richie Valens "}];
+		YoutubeMusicPlayer.time_dragging = false;
+	
+		YoutubeMusicPlayer.loadPlaylist();
+		YoutubeMusicPlayer.loadPlayer();
+	},
+	loadPlayer: function(){	  
+		/*var params = { allowScriptAccess: "always", bgcolor: "#cccccc" };
+		var atts = { id: "myytplayer" };
+		swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&playerapiid=ytplayer&version=3", "ytapiplayer", "1", "1", "8", null, null, params, atts);*/
+		var tag = document.createElement('script');
+		tag.src = "//www.youtube.com/iframe_api";
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+	},
+	loadPlaylist: function(){
+		jQuery.each(YoutubeMusicPlayer.playlist, function(k, v) {
+			YoutubeMusicPlayer.playlist[k]['playing'] = 0;
+			YoutubeMusicPlayer.playlist[k]['time'] = 0;
+			$("#playlist").append('<li class="ui-state-default" id="track_'+k+'"><span class="ui-icon ui-icon-circle-triangle-e"></span>'+v.title+'</li>');
+		});
+	},
+	loadControls: function(){
+			$("#next").click(function() {  YoutubeMusicPlayer.goToNextItem();	});
+		$("#previous").click(function() {  YoutubeMusicPlayer.goToPrevItem(); 	});
+		return false;
+		$('#slider').slider({
+			range: false,
+			value: 100,
+			min: 0,
+			max: 100
+		});
+		
+		$('#time_slider').slider({
+			range: false,
+			value: 100,
+			min: 0,
+			max: 100
+		});
+		
+		var min =(($("#playlist li").height()+parseFloat($("#playlist li").css("margin-top"))+parseFloat($("#playlist li").css("margin-bottom"))+parseFloat($("#playlist li").css("padding-top"))+parseFloat($("#playlist li").css("padding-bottom"))) * $("#playlist li").size());
+		if( min > $("#playlist").height()) {
+			$("#slider-vertical").slider({
+				orientation: "vertical",
+				range: "min",
+				min: -min+10,
+				max: 0,
+				value: 0,
+				slide: function(event, ui) {
+					$("#playlist").css('margin-top', ui.value);
+				}
+			});
+		} else {
+			$("#playlist").css('width', '100%');
+			$("#slider-vertical").css('display', 'none');
+		}
+
+		//set click events
+		$("#play").click(function() {
+			YoutubeMusicPlayer.play();
+		});
+				$("#seek-next").click(function() { YoutubeMusicPlayer.ytplayer.seekTo(YoutubeMusicPlayer.ytplayer.getCurrentTime()+10, true);	});
+		$("#seek-prev").click(function() { YoutubeMusicPlayer.ytplayer.seekTo(YoutubeMusicPlayer.ytplayer.getCurrentTime()-10, true);	});
+		$("#next").click(function() {  YoutubeMusicPlayer.goToNextItem();	});
+		$("#previous").click(function() {  YoutubeMusicPlayer.goToPrevItem(); 	});
+		$("#pause").click(function() {	YoutubeMusicPlayer.ytplayer.pauseVideo();	});
+		$("#stop").click(function() {	YoutubeMusicPlayer.ytplayer.stopVideo();	});
+
+		$("#volume").click(function() {
+			$('#volume').addClass('ui-state-hover');
+			if($('#volume span').hasClass('ui-icon-volume-on')) {
+				YoutubeMusicPlayer.ytplayer.mute();
+				$('#volume span').removeClass('ui-icon-volume-on');
+				$('#volume span').addClass('ui-icon-volume-off');
+			} else {
+				YoutubeMusicPlayer.ytplayer.unMute();
+				$('#volume span').removeClass('ui-icon-volume-off');
+				$('#volume span').addClass('ui-icon-volume-on');
+			}
+		});
+		$('#slider').bind('slide', function(event, ui) {
+			var newVolume = $('#slider').slider('option', 'value');
+			YoutubeMusicPlayer.ytplayer.setVolume(newVolume);
+		});
+		
+		$('#icons li').hover(
+			function(){ 
+				$(YoutubeMusicPlayer).addClass("ui-state-hover"); 
+			},
+			function(){ 
+				$(YoutubeMusicPlayer).removeClass("ui-state-hover"); 
+			}
+		);
+		$("#playlist li").click(function() {
+			YoutubeMusicPlayer.current_item = parseInt(this.id.split('_')[1]);
+			YoutubeMusicPlayer.loadNewTrack(YoutubeMusicPlayer.current_item);
+		});
+		
+		$('#time_slider').bind('slidestart', function(event, ui) {
+			YoutubeMusicPlayer.time_dragging = true;
+		});
+		$('#time_slider').bind('slidestop', function(event, ui) {
+			YoutubeMusicPlayer.time_dragging = false;
+			var newTime = $('#time_slider').slider('option', 'value');
+			YoutubeMusicPlayer.ytplayer.seekTo(YoutubeMusicPlayer.getDuration()*(newTime/100), true);
+		});
+	},
+	play: function(){
+		if(YoutubeMusicPlayer.ytplayer.getPlayerState() >= 1 && YoutubeMusicPlayer.ytplayer.getPlayerState() <= 3) {
+			YoutubeMusicPlayer.ytplayer.playVideo();
+		} else {
+			YoutubeMusicPlayer.loadNewTrack(YoutubeMusicPlayer.current_item);
+		}
+		//YoutubeMusicPlayer.ytplayer.playVideo();
+		$('#slider').slider('option', 'value', YoutubeMusicPlayer.ytplayer.getVolume());
+		$('#play').addClass('ui-state-hover');
+	},
+	setPlayer: function(){
+		
+		YoutubeMusicPlayer.ytplayer = new YT.Player('ytapiplayer', {
+          height: '390',
+          width: '640',
+          videoId: 'u1zgFlCw8Aw',
+          events: {
+			  'onReady': onYouTubePlayerReady,
+			  'onStateChange': onPlayerStateChange,
+			  'onError': YoutubeMusicPlayer.onPlayerError
+          }
+        });
+		YoutubeMusicPlayer.loadControls();
+		YoutubeMusicPlayer.updateytplayerInfo();
+		
+		/*
+		YoutubeMusicPlayer.ytplayer = $('#myytplayer')[0];
+		YoutubeMusicPlayer.updateytplayerInfo();
+		YoutubeMusicPlayer.loadControls();
+		setInterval(YoutubeMusicPlayer.updateytplayerInfo, 250);
+		YoutubeMusicPlayer.ytplayer.addEventListener("onStateChange", "YoutubeMusicPlayer.onytplayerStateChange");
+		YoutubeMusicPlayer.ytplayer.addEventListener("onError", "YoutubeMusicPlayer.onPlayerError");*/
+	},
+	updateytplayerInfo: function(){
+		$('#now_playing').html('Currently Playing : ' + YoutubeMusicPlayer.playlist[YoutubeMusicPlayer.current_item].title);
+		$('#elapsed_time').html('Time elapsed : '+YoutubeMusicPlayer.sec2hms(YoutubeMusicPlayer.getCurrentTime())+'/'+YoutubeMusicPlayer.sec2hms(YoutubeMusicPlayer.getDuration())+'');
+		
+		if(!YoutubeMusicPlayer.time_dragging || YoutubeMusicPlayer.ytplayer.getPlayerState() == 2 || YoutubeMusicPlayer.ytplayer.getPlayerState() == 3) {
+			var progress = YoutubeMusicPlayer.getCurrentTime()/YoutubeMusicPlayer.getDuration()*100;
+			if(!isNaN(progress)) {
+				$('#time_slider').slider('option', 'value', parseFloat(YoutubeMusicPlayer.getCurrentTime()/YoutubeMusicPlayer.getDuration()*100));
+			}
+		}
+		if(YoutubeMusicPlayer.getDuration() == YoutubeMusicPlayer.getCurrentTime() &&  YoutubeMusicPlayer.getCurrentTime() > 1) {
+			YoutubeMusicPlayer.ytplayer.stopVideo();
+			YoutubeMusicPlayer.goToNextItem();
+		}
+	},
+	onPlayerError: function(error){
+		if(error > 0)
+			YoutubeMusicPlayer.ytplayer.stopVideo();
+			console.log(error);
+		$('#now_playing').html('Error ' + error);
+	},
+	onytplayerStateChange: function(newState){
+		var status = '';
+		$('#icons li').removeClass('ui-state-hover');
+		switch(newState) {
+			case -1:
+				status = '';
+				break;    
+			case 0:
+				status = 'ended';
+				break;    
+			case 1:
+				status = '';
+				$('#play').addClass('ui-state-hover');
+				break;
+			case 2:
+				status = 'paused';
+				$('#pause').addClass('ui-state-hover');
+				break;    
+			case 3:
+				status = 'buffering...';
+				break;  
+			case 5:
+				status = 'stopped';
+				$('#stop').addClass('ui-state-hover');
+				break;
+			default:
+				status = '';
+				break;
+		}
+		$('#player_state').html(status);
+	},
+	loadNewTrack: function(id){
+		YoutubeMusicPlayer.current_item = id;
+		YoutubeMusicPlayer.ytplayer.loadVideoById(YoutubeMusicPlayer.playlist[YoutubeMusicPlayer.current_item].youtube_id, 0);
+		$('#playlist li').removeClass('ui-state-hover');
+		$('#track_'+id).addClass('ui-state-hover');
+	},
+	goToNextItem: function(){
+		var next_item = YoutubeMusicPlayer.current_item + 1;
+		next_item = (next_item >= YoutubeMusicPlayer.playlist.length)?0:next_item;
+		YoutubeMusicPlayer.loadNewTrack(next_item);
+	},
+	goToPrevItem: function(){	
+		var prev_item = YoutubeMusicPlayer.current_item - 1;
+		prev_item = (prev_item < 0)?(YoutubeMusicPlayer.playlist.length-1):prev_item;
+		YoutubeMusicPlayer.loadNewTrack(prev_item);
+	},
+	getCurrentTime: function(){
+		return YoutubeMusicPlayer.ytplayer.getCurrentTime();
+	},	
+	getDuration: function(){
+		return YoutubeMusicPlayer.ytplayer.getDuration();
+	},
+	sec2hms: function(seconds){
+		if(seconds < 0) {
+			return '--:--';
+		}
+		var mins = Math.floor(seconds  / 60);
+		var secs = seconds % 60;
+
+		return mins + ':' + YoutubeMusicPlayer.AddZero(Math.round(secs));
+	},
+	AddZero: function(num){
+		return ((num >= 0)&&(num < 10))?"0"+num:num+"";
+	}
+};
+
+
+
+
+$(document).ready(function () {
+    YoutubeMusicPlayer.start();
+});
+function onYouTubeIframeAPIReady() {
+	YoutubeMusicPlayer.setPlayer();
+	//YoutubeMusicPlayer.play();
+}
+function onYouTubePlayerReady() {
+	//YoutubeMusicPlayer.setPlayer();
+	//YoutubeMusicPlayer.start();
+	YoutubeMusicPlayer.play();
+}
+
+function onPlayerStateChange(event) {
+	console.log(event.data);
+	console.log(YT.PlayerState);
+}
