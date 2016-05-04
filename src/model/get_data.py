@@ -143,6 +143,7 @@ def clean_data(df):
 
     for key in words_to_remove:
         for word in words_to_remove[key]:
+            # testing
             try:
                 df[key] = df[key].str.replace(word, '')
             except:
@@ -207,6 +208,7 @@ if __name__=='__main__':
     print "Get house details from URLs and store them into dataframe..."
     main_df = scrape(urls, scrape_cols, link_class, img_class, website)
     print "house info dataframe saved, and start cleaning df"
+    print main_df.head()
     clean_df = clean_data(main_df)
     final_df = clean_df.merge(geo_subset, how='left', left_on='postalCode', right_on='Postal Code')
 
