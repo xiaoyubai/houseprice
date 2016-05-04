@@ -188,7 +188,7 @@ if __name__=='__main__':
     # geo_subset = geo_df[geo_df['County']=='San Francisco']
     raw_zipcodes = list(geo_subset['Postal Code'])
     zipcodes = []
-    for zipcode in zipcodes:
+    for zipcode in raw_zipcodes:
         print zipcode
         try:
             zipcodes.append(int(zipcode))
@@ -205,13 +205,10 @@ if __name__=='__main__':
     # complete_url = https://www.ziprealty.com/homes-for-sale/list/sf/by-zip/94102/detailed
 
     print "Get URLs based on zipcodes"
-    print zipcodes
     urls = get_basic_info(zipcodes, website)
-    print urls
     print "Get house details from URLs and store them into dataframe..."
     main_df = scrape(urls, scrape_cols, link_class, img_class, website)
     print "house info dataframe saved, and start cleaning df"
-    print main_df.head()
     clean_df = clean_data(main_df)
     final_df = clean_df.merge(geo_subset, how='left', left_on='postalCode', right_on='Postal Code')
 
