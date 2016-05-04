@@ -204,6 +204,7 @@ if __name__=='__main__':
     # complete_url = https://www.ziprealty.com/homes-for-sale/list/sf/by-zip/94102/detailed
 
     print "Get URLs based on zipcodes"
+    print zipcodes
     urls = get_basic_info(zipcodes, website)
     print urls
     print "Get house details from URLs and store them into dataframe..."
