@@ -6,6 +6,7 @@ import time
 from bs4 import BeautifulSoup, UnicodeDammit
 import os
 import boto
+import urllib
 
 
 ACCESS_KEY = os.environ['AWS_ACCESS_KEY_ID']
@@ -35,9 +36,20 @@ def scrape_img_link(img_urls):
         img_link = '/'.join(parts[:-1]) + '/' + add_one_folder + '/' + add_second_folder + '/' + last_part
         all_imgs = []
         for i in xrange(1, 10):
-            all_imgs.append(img_link + '_P0' + str(i) + '.jpg')
+            img_link = img_link + '_P0' + str(i) + '.jpg'
+            r = requests.get(img_link)
+            if r.status_code == 404:
+                break
+            else:
+                all_imgs.append(img_link)
         for i in xrange(11, 21):
-            all_imgs.append(img_link + '_P' + str(i) + '.jpg')
+            img_link = img_link + '_P' + str(i) + '.jpg'
+            r = requests.get(img_link)
+            if r.status_code == 404:
+                break
+            else:
+                all_imgs.append(img_link)
+
         all_imgs_for_all_links.append(all_imgs)
     return all_imgs_for_all_links
 
@@ -55,7 +67,7 @@ def scrape(urls, scrape_cols, link_class, img_class, website):
             col_series = pd.Series(col_list, name=col)
             basic_data = pd.concat([basic_data, col_series], axis = 1)
 
-        detail_names = ['NA', 'bed', 'bath', 'sqft', 'price_per_sqrt', 'CND', 'NA', 'lot_size', 'built', 'on_site', 'NA']
+        detail_names = ['NA1', 'bed', 'bath', 'sqft', 'price_per_sqrt', 'CND', 'NA2', 'lot_size', 'built', 'on_site', 'NA3']
 
         for col in scrape_cols['class']:
             col_dict[col] = soup(class_=col)
@@ -169,9 +181,9 @@ def write_to_s3(input_file, output_file):
 if __name__=='__main__':
     geo_df = pd.read_csv('../../data/us_postal_codes.csv')
     geo_subset = geo_df[geo_df['County']=='San Francisco']
-    zipcodes = list(geo_subset['Postal Code'])
-    zipcodes = [int(zipcode) for zipcode in zipcodes]
-    # zipcodes = [94102, 94103, 94104, 94105]
+    # zipcodes = list(geo_subset['Postal Code'])
+    # zipcodes = [int(zipcode) for zipcode in zipcodes]
+    zipcodes = [94102, 94103, 94104, 94105]
     # zipcodes = [94103]
     website = 'ziprealty'
     scrape_cols ={'itemprop': ['postalCode', 'addressRegion', 'addressLocality', 'streetAddress'], 'class': ['mt-10 mb-10 prop-details'], 'price': 'font-list-price font-20' }
@@ -189,12 +201,18 @@ if __name__=='__main__':
     clean_df = clean_data(main_df)
     final_df = clean_df.merge(geo_subset, how='left', left_on='postalCode', right_on='Postal Code')
 
-    # Get all imgs for each property
-    imgs = scrape_img_link(final_df['img'])
-    final_df['imgs_to_train'] = imgs
-
-    input_file = '../../data/temp.csv'
+    input_file = 'temp.csv'
     print "Save dataframe as CSV"
     final_df.to_csv(input_file)
     print "Write CSV to S3"
     write_to_s3(input_file, 'sf.csv')
+
+    print "Write json file to S3 with img links"
+    # Get all imgs for each property
+    print "Start scraping all img links"
+    imgs = scrape_img_link(final_df['img'])
+    json_df = final_df[['streetAddress', 'link', 'price']]
+    json_df['imgs_to_train'] = imgs
+    json_file = 'sf.json'
+    final_df.to_json(json_file)
+    write_to_s3(json_file, json_file)
