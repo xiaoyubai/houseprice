@@ -189,6 +189,7 @@ if __name__=='__main__':
     raw_zipcodes = list(geo_subset['Postal Code'])
     zipcodes = []
     for zipcode in zipcodes:
+        print zipcode
         try:
             zipcodes.append(int(zipcode))
         except:
