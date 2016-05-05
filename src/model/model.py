@@ -118,11 +118,11 @@ def grid_search_helper(model, grid, x, y, scoring='mean_squared_error'):
 
 if __name__ == '__main__':
     this_year = 2016
-    f = pd.read_csv("https://s3.amazonaws.com/cruntar_house/sf.csv")
+    f = pd.read_csv("https://s3.amazonaws.com/cruntar_house/bayarea.csv")
     # X_cols = ['postalCode', 'bed', 'bath', 'sqft', 'lot_size', 'built', 'on_site', 'City', 'Region']
-    all_cols = ['postalCode', 'bed', 'bath', 'sqft', 'lot_size', 'built', 'on_site', 'City', 'price', 'HOA', 'Latitude', 'Longitude', 'link', 'img', 'CND']
+    all_cols = ['postalCode', 'bed', 'bath', 'sqft', 'lot_size', 'built', 'on_site', 'City', 'price', 'HOA', 'Latitude', 'Longitude', 'link', 'img', 'CND', 'Place Name']
     numeric_cols = ['bed', 'bath', 'sqft', 'lot_size', 'built', 'on_site', 'price', 'HOA', 'Latitude', 'Longitude']
-    cat_cols = list(set(all_cols) - set(numeric_cols) - set(['link', 'img', 'postalCode', 'City']))
+    cat_cols = list(set(all_cols) - set(numeric_cols) - set(['link', 'img', 'postalCode', 'City', 'Place Name']))
     y_col = 'price'
     df_temp = f[all_cols]
     df_temp['lot_size'][df_temp['lot_size'].isnull()]=0
@@ -132,7 +132,7 @@ if __name__ == '__main__':
         df_temp = dummies(df_temp, col)
     df_temp = df_temp[(df_temp['price'] < 3000000)]
     y = df_temp[y_col].values
-    X = df_temp.drop([y_col, 'link', 'img', 'postalCode'], axis=1).values
+    X = df_temp.drop([y_col, 'link', 'img', 'postalCode', 'Place Name'], axis=1).values
     model = xgb.XGBRegressor(learning_rate=0.05,
                            n_estimators=200,
                            subsample=0.5,
@@ -165,7 +165,7 @@ if __name__ == '__main__':
     df = dummies(df, 'CND')
     df = df[df['price'] < 3000000]
     y = df[y_col].values
-    X_cols = list(set(df.columns) - set([y_col, 'link', 'img', 'postalCode', 'City']))
+    X_cols = list(set(df.columns) - set([y_col, 'link', 'img', 'postalCode', 'City', 'Place Name']))
     x = df[X_cols].values
 
     model = RandomForestRegressor()
@@ -184,15 +184,18 @@ if __name__ == '__main__':
                       'min_samples_split': [1, 2, 4],
                       'min_samples_leaf': [1, 2, 4],
                       'bootstrap': [True, False],
-                      'n_estimators': [10, 20, 40],
+                      'n_estimators': [10, 20, 40, 100],
                       'random_state': [1]}
 
     best_model_pram = grid_search_helper(model, random_forest_grid, x, y)
     df['estimate'] = best_model_pram.predict(x)
+    df['estimate'] = df['estimate'].astype(int)
     df['percent_difference'] = (df['estimate'] - df['price']) / df['price']
+    df = df[df['percent_difference']>0.1]
+
 
     print "Save dataframe as CSV"
     input_file = '../../data/df_prediction.csv'
     df.to_csv(input_file)
     print "Write CSV to S3"
-    write_to_s3(input_file, 'prediction.csv')
+    write_to_s3(input_file, 'prediction_bayarea.csv')

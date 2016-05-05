@@ -55,6 +55,7 @@ def scrape_img_link(img_urls):
 
 def scrape(urls, scrape_cols, link_class, img_class, website):
     whole_data = pd.DataFrame()
+    i = 1
     for webpage in urls:
         try:
             html_str = requests.get(webpage, verify=False)
@@ -124,8 +125,11 @@ def scrape(urls, scrape_cols, link_class, img_class, website):
             basic_data['img'] = imgs
 
             whole_data = pd.concat([whole_data, basic_data], axis=0)
+            print i, "success"
         except:
+            print i, "failure"
             pass
+        i += 1
 
     return whole_data
         #details = soup.find("div", {"id": "searchCount"}).text
@@ -183,9 +187,11 @@ def write_to_s3(input_file, output_file):
     file_object.set_canned_acl('public-read')
 
 if __name__=='__main__':
+
+    counties = ['San Francisco', 'Daly City', 'San Mateo', 'Menlo Park', 'Palo Alto', 'Mountain View', 'Sunnyvale', 'Santa Clara', 'San Jose', 'Fremont', 'Union City', 'Hayward', 'San Leandro', 'Oakland', 'Berkeley']
+
     geo_df = pd.read_csv('../../data/us_postal_codes.csv')
-    geo_subset = geo_df
-    # geo_subset = geo_df[geo_df['County']=='San Francisco']
+    geo_subset = geo_df[geo_df['County'].isin(counties)]
     raw_zipcodes = list(geo_subset['Postal Code'])
     zipcodes = []
     for zipcode in raw_zipcodes:
@@ -211,11 +217,11 @@ if __name__=='__main__':
     clean_df = clean_data(main_df)
     final_df = clean_df.merge(geo_subset, how='left', left_on='postalCode', right_on='Postal Code')
 
-    input_file = 'temp.csv'
+    input_file = 'bayarea.csv'
     print "Save dataframe as CSV"
     final_df.to_csv(input_file)
     print "Write CSV to S3"
-    write_to_s3(input_file, 'us.csv')
+    write_to_s3(input_file, 'bayarea.csv')
 
     print "Write json file to S3 with img links"
     # Get all imgs for each property
